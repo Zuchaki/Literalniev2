@@ -4,17 +4,19 @@ import { faBackspace } from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
   addLLetterToArray: (clicedKey?: string) => void;
-  deleteLetterFromArray: () => void;
+  deleteLastLetterFromArray: () => void;
   checkWordInArray: () => void;
+  className?: string;
 };
 const Keyboard: React.FC<Props> = ({
   addLLetterToArray,
-  deleteLetterFromArray,
+  deleteLastLetterFromArray,
   checkWordInArray,
+  className,
 }) => {
   const keysOnKeyboard = ["ąćęłóśńżź", "qwertyuiop", "asdfghjkl", "zxcvbnm"];
   return (
-    <div className="flex flex-col gap-6">
+    <div className={`flex flex-col gap-6 ${className}`}>
       <div className="flex flex-col gap-2 items-center">
         {keysOnKeyboard.map((line) => (
           <div className="flex gap-1" key={line}>
@@ -40,7 +42,7 @@ const Keyboard: React.FC<Props> = ({
           key={"Backspace"}
           icon={faBackspace}
           keyValue="Backspace"
-          onActive={deleteLetterFromArray}
+          onActive={deleteLastLetterFromArray}
           className="w-full"
         />
       </div>

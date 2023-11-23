@@ -52,6 +52,8 @@ const config: Config = {
           900: "#A01466",
           1000: "#8B104B",
         },
+        success: "#ecfccb",
+        warning: "#fef08a",
       },
 
       flex: {

@@ -1,18 +1,27 @@
 import { Word } from "@/pages";
+import createEmptyArray from "@/utils/createEmptyArray";
+import { useEffect } from "react";
+import SingleLetter from "./SingleLetter";
 
 type Props = {
   words: Word[];
+  className?: string;
 };
 
-const ResultsLetters: React.FC<Props> = ({ words }) => {
+const ResultsLetters: React.FC<Props> = ({ words, className }) => {
+  const placeHolders = createEmptyArray(5, 5);
+
   return (
-    <div className="flex flex-col gap-1">
-      {words.map((line) => (
-        <div className="flex flex-row gap-1">
-          {line.map((letter) => (
-            <div className="w-12 h-12 border flex border-primary-600 justify-center items-center">
-              {letter ? letter.letter : ""}
-            </div>
+    <div className={`flex flex-col gap-1 ${className}`}>
+      {placeHolders.map((line, lineIndex) => (
+        <div className="flex flex-row gap-1" key={lineIndex}>
+          {line.map((_letter, letterIndex) => (
+            <SingleLetter
+              key={`${lineIndex}-${letterIndex}`}
+              lineIndex={lineIndex}
+              letterIndex={letterIndex}
+              words={words}
+            />
           ))}
         </div>
       ))}
