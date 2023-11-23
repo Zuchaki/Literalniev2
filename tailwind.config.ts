@@ -13,33 +13,6 @@ const config: Config = {
         "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
     },
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
-      boxShadow: {
-        custom: "0 0 0 2px",
-      },
-      fontSize: {
-        "heading-2xl": ["76px", { lineHeight: "83.6px", fontWeight: 600 }],
-        "heading-xl": ["64px", { lineHeight: "70.4px", fontWeight: 600 }],
-        "heading-l": ["54px", { lineHeight: "59.4px", fontWeight: 600 }],
-        "heading-m": ["48px", { lineHeight: "52.8px", fontWeight: 600 }],
-        "heading-s": ["40px", { lineHeight: "44px", fontWeight: 600 }],
-        "heading-xs": ["32px", { lineHeight: "41.6px", fontWeight: 600 }],
-        "heading-2xs": ["24px", { lineHeight: "33.6px", fontWeight: 600 }],
-        "heading-3xs": ["20px", { lineHeight: "30px", fontWeight: 500 }],
-        "body-l": ["18px", { lineHeight: "27px", fontWeight: 400 }],
-        "body-m": ["16px", { lineHeight: "25.6px", fontWeight: 400 }],
-        "body-s": ["14px", { lineHeight: "18.2px", fontWeight: 400 }],
-        caption: ["12px", { lineHeight: "13.2px", fontWeight: 500 }],
-        "button-text": ["16px", { lineHeight: "16px", fontWeight: 500 }],
-        "ui-text": ["16px", { lineHeight: "16px", fontWeight: 400 }],
-      },
-      // Primary Colors
-      // Primary Colors
-      // Primary Colors
       colors: {
         primary: {
           100: "#F5F8FD",
