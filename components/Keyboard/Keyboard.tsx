@@ -1,18 +1,21 @@
 import React from "react";
 import Key from "./Key";
 import { faBackspace } from "@fortawesome/free-solid-svg-icons";
+import { Word } from "@/pages";
 
 type Props = {
   addLLetterToArray: (clicedKey?: string) => void;
   deleteLastLetterFromArray: () => void;
-  checkWordInArray: () => void;
+  checkLastWordInArray: () => void;
   className?: string;
+  words: Word[];
 };
 const Keyboard: React.FC<Props> = ({
   addLLetterToArray,
   deleteLastLetterFromArray,
-  checkWordInArray,
+  checkLastWordInArray,
   className,
+  words,
 }) => {
   const keysOnKeyboard = ["ąćęłóśńżź", "qwertyuiop", "asdfghjkl", "zxcvbnm"];
   return (
@@ -22,6 +25,7 @@ const Keyboard: React.FC<Props> = ({
           <div className="flex gap-1" key={line}>
             {line.split("").map((keyValue) => (
               <Key
+                words={words}
                 key={keyValue}
                 keyValue={keyValue}
                 onActive={addLLetterToArray}
@@ -33,13 +37,11 @@ const Keyboard: React.FC<Props> = ({
       </div>
       <div className="flex w-full h-10 felx-row gap-2">
         <Key
-          key={"Enter"}
           keyValue="Enter"
-          onActive={checkWordInArray}
+          onActive={checkLastWordInArray}
           className="w-full"
         />
         <Key
-          key={"Backspace"}
           icon={faBackspace}
           keyValue="Backspace"
           onActive={deleteLastLetterFromArray}

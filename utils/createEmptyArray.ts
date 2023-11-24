@@ -1,5 +1,5 @@
 const createEmptyArray = (row: number, col: number) => {
-  const arr: (string | null)[][] = [];
+  const arr: null[][] = [];
 
   for (let i = 0; i < col; i += 1) {
     arr[i] = [];

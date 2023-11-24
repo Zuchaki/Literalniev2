@@ -1,6 +1,5 @@
 import { Word } from "@/pages";
 import createEmptyArray from "@/utils/createEmptyArray";
-import { useEffect } from "react";
 import SingleLetter from "./SingleLetter";
 
 type Props = {

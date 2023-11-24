@@ -5,6 +5,7 @@ const config: Config = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./config/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     backgroundImage: {
@@ -52,7 +53,7 @@ const config: Config = {
           900: "#A01466",
           1000: "#8B104B",
         },
-        success: "#ecfccb",
+        success: "#d9f99d",
         warning: "#fef08a",
       },
 

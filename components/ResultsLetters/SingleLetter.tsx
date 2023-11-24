@@ -7,15 +7,15 @@ type Props = {
   letterIndex: number;
 };
 const SingleLetter: React.FC<Props> = ({ words, lineIndex, letterIndex }) => {
-  const classNameValue =
+  const defaultClassName =
     "w-12 h-12 border flex border-primary-600 justify-center items-center";
 
   if (!words[lineIndex] || !words[lineIndex][letterIndex])
-    return <div className={classNameValue}>{""}</div>;
+    return <div className={defaultClassName}>{""}</div>;
 
   return (
     <div
-      className={classNames(classNameValue, {
+      className={classNames(defaultClassName, {
         "bg-success": words[lineIndex][letterIndex].status === "FOUND",
         "bg-warning":
           words[lineIndex][letterIndex].status === "IN_THE_WRONG_PLACE",

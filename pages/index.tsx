@@ -1,13 +1,12 @@
 import { Inter } from "next/font/google";
 import { useQuery } from "react-query";
 import { getWords } from "../services/getWord";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Keyboard from "../components/Keyboard/Keyboard";
-import Trials from "../components/ResultsLetters/ResultsLetters";
 import { endOfArray } from "@/utils/findEndOfArray";
 import ResultsLetters from "../components/ResultsLetters/ResultsLetters";
-import SingleLetter from "@/components/ResultsLetters/SingleLetter";
-import { split } from "postcss/lib/list";
+import toast from "react-hot-toast";
+import Modal from "@/components/Modal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,15 +17,17 @@ export enum Status {
   IN_TRY = "IN_TRY",
 }
 
+enum GameEndStatus {
+  WIN = "WIN",
+  LOST = "LOST",
+}
+
+type IsEnd = { isEnd: boolean; status: GameEndStatus };
 export type Word = { letter: string; status: Status }[];
 
 const Home = () => {
   const [words, setWords] = useState<Word[]>([[]]);
-  const [checked, setChecked] = useState<Word>([]);
-
-  useEffect(() => {
-    console.log(checked);
-  }, [checked]);
+  const [isEnd, setIsEnd] = useState<IsEnd>();
 
   const {
     data: answerWord,
@@ -55,9 +56,13 @@ const Home = () => {
   });
 
   const addLetterToArray = (clickedKey?: string) => {
-    if (typeof clickedKey !== "string") return;
-    if (endOfArray(words).inner >= 5) return;
-
+    if (
+      typeof clickedKey !== "string" ||
+      endOfArray(words).inner >= 5 ||
+      endOfArray(words).outer >= 5 ||
+      isEnd
+    )
+      return;
     const newWords = [...words];
     newWords[endOfArray(words).outer] = [
       ...newWords[endOfArray(words).outer],
@@ -71,7 +76,6 @@ const Home = () => {
 
   const deleteLastLetterFromArray = () => {
     if (endOfArray(words).inner === 0) return;
-
     const newWords = [...words];
     newWords[endOfArray(words).outer] = newWords[endOfArray(words).outer].slice(
       0,
@@ -80,12 +84,14 @@ const Home = () => {
     setWords(newWords);
   };
 
-  const checkWordInArray = () => {
+  const checkLastWordInArray = () => {
     if (endOfArray(words).inner < 5) return;
-    if (!checkWord?.[0]?.slowo) return console.log("Nie ma takeigo slowa");
+    if (!checkWord?.[0]?.slowo)
+      return toast.error("Nie ma takiego słowa w bazie");
     const lastWordIndex = endOfArray(words).outer;
     const newWords = words;
-    const newChecked = checked;
+
+    //Analyze the current word by comparing it to the answer and modify the status of every letter
     answerWord?.[0].slowo
       .toUpperCase()
       .split("")
@@ -99,10 +105,6 @@ const Home = () => {
                 letter: newWords[lastWordIndex][letterIndex].letter,
                 status: Status.IN_THE_WRONG_PLACE,
               };
-              newChecked.push({
-                letter: newWords[lastWordIndex][letterIndex].letter,
-                status: Status.IN_THE_WRONG_PLACE,
-              });
             }
           }
         );
@@ -115,29 +117,36 @@ const Home = () => {
             letter: newWords[lastWordIndex][index].letter,
             status: Status.FOUND,
           };
-          newChecked.push({
-            letter: newWords[lastWordIndex][index].letter,
-            status: Status.FOUND,
-          });
         }
         if (newWords[lastWordIndex][index].status === "IN_TRY") {
           newWords[lastWordIndex][index] = {
             letter: newWords[lastWordIndex][index].letter,
             status: Status.MISS,
           };
-          newChecked.push({
-            letter: newWords[lastWordIndex][index].letter,
-            status: Status.MISS,
-          });
         }
       });
-    console.log(newChecked);
-    setChecked(newChecked);
+
+    //Check if the user won or lost the game
+    if (
+      newWords[lastWordIndex].filter((letter) => letter.status === "FOUND")
+        .length === 5
+    ) {
+      setIsEnd({ isEnd: true, status: GameEndStatus.WIN });
+    }
+    if (
+      newWords[lastWordIndex].filter((letter) => letter.status === "FOUND")
+        .length !== 5 &&
+      endOfArray(newWords).outer === 4
+    ) {
+      setIsEnd({ isEnd: true, status: GameEndStatus.LOST });
+    }
+
+    //Close the current word and start a new one
     setWords([...newWords, []]);
   };
 
-  if (isLoading) <div>Loading...</div>;
-  if (isError) <div>Something gone wrong</div>;
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Something gone wrong</div>;
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
@@ -146,8 +155,20 @@ const Home = () => {
       <Keyboard
         addLLetterToArray={addLetterToArray}
         deleteLastLetterFromArray={deleteLastLetterFromArray}
-        checkWordInArray={checkWordInArray}
+        checkLastWordInArray={checkLastWordInArray}
+        words={words}
       />
+      <Modal
+        onRequestClose={() => setIsEnd({ isEnd: false, status: isEnd!.status })}
+        isOpen={!!isEnd?.isEnd}
+        showCloseButton
+        closeButtonLabel="Zamknij"
+      >
+        Gra skończona,
+        {isEnd?.status === "WIN"
+          ? ` udało ci się za: ${endOfArray(words).outer} próbą`
+          : ` nie udało ci się zgadnąć słowa`}
+      </Modal>
     </main>
   );
 };
